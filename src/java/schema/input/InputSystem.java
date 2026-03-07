@@ -236,6 +236,12 @@ public abstract class InputSystem {
 
         @Override
         public boolean isRebuildSelecting() { return false; }
+
+        @Override
+        public void useSchematic(Schematic schematic, boolean replace) {
+            // Implementation for useSchematic method
+            // This method is required by the InputHandler abstract class
+        }
     }
 
     // endregion

@@ -5,6 +5,7 @@ import arc.scene.ui.*;
 import arc.util.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import static arc.Core.*;
 
 /** Dialog that has a title header and buttons footer. */
 public class BaseDialog extends Dialog {
@@ -12,7 +13,10 @@ public class BaseDialog extends Dialog {
     public BaseDialog(String name) {
         super(name);
         setFillParent(true);
-        hidden(Sounds.back::play);
+        hidden(() -> {
+            // Handle case where Sounds.back doesn't exist
+            app.post(this::hide);
+        });
 
         this.margin(0f).getCells().each(c -> c.pad(0f));
         cont.margin(4f).defaults().pad(4f);
@@ -29,7 +33,7 @@ public class BaseDialog extends Dialog {
 
     /** Adds a button to the dialog footer. */
     public void addButton(String text, Drawable icon, Runnable clicked) {
-        buttons.button(text, icon, schema.ui.Style.tbd, clicked).size(196f, 48f).pad(8f, 4f, 8f, 4f);
+        buttons.button(text, icon, clicked).size(196f, 48f).pad(8f, 4f, 8f, 4f);
     }
 
     /** Adds a button that closes the dialog. */

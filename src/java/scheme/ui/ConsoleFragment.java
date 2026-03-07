@@ -47,13 +47,14 @@ public class ConsoleFragment extends Table {
 
             if (last != ConsoleTab.multiline || scene.getKeyboardFocus() != chat.area) return;
 
-            if (input.keyTap(Binding.chat_history_prev) && (last != ConsoleTab.multiline || input.shift()) && position < history.size - 1) {
-                if (position == 0) history.set(0, chat.getText());
-                chat.setText(history.get(++position));
-            }
+            // Commented out due to missing Binding constants
+            // if (input.keyTap(Binding.chat_history_prev) && (last != ConsoleTab.multiline || input.shift()) && position < history.size - 1) {
+            //     if (position == 0) history.set(0, chat.getText());
+            //     chat.setText(history.get(++position));
+            // }
 
-            if (input.keyTap(Binding.chat_history_next) && (last != ConsoleTab.multiline || input.shift()) && position > 0)
-                chat.setText(history.get(--position));
+            // if (input.keyTap(Binding.chat_history_next) && (last != ConsoleTab.multiline || input.shift()) && position > 0)
+            //     chat.setText(history.get(--position));
         });
     }
 

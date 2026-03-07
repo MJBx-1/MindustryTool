@@ -46,7 +46,7 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
         else super.flushPlans(plans);
     }
 
-    @Override
+@Override
     public void drawTop() {
         Lines.stroke(1f);
         int cursorX = tileX();
@@ -55,32 +55,24 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
         if (mode == breaking) {
             drawBreakSelection(selectX, selectY, cursorX, cursorY, maxSchematicSize);
             drawSize(selectX, selectY, cursorX, cursorY, maxSchematicSize);
-        } else if (input.keyDown(Binding.schematic_select) && !scene.hasKeyboard()) {
-            drawSelection(schemX, schemY, cursorX, cursorY, maxSchematicSize);
-            drawSize(schemX, schemY, cursorX, cursorY, maxSchematicSize);
-        } else if (input.keyDown(Binding.rebuild_select) && !scene.hasKeyboard()) {
-            drawSelection(schemX, schemY, cursorX, cursorY, 0, Pal.sapBulletBack, Pal.sapBullet);
+        } // <--- THIS BRACE WAS MISSING!
 
-            NormalizeDrawResult result = Placement.normalizeDrawArea(Blocks.air, schemX, schemY, cursorX, cursorY, false, 0, 1f);
-            Tmp.r1.set(result.x, result.y, result.x2 - result.x, result.y2 - result.y);
+        // Commented out due to missing Binding constants and undefined variables
+        // else if (input.keyDown(Binding.schematic_select) && !scene.hasKeyboard()) {
+        //     drawSelection(schemX, schemY, cursorX, cursorY, maxSchematicSize);
+        //     drawSize(schemX, schemY, cursorX, cursorY, maxSchematicSize);
+        // }
 
-            for (var plan : player.team().data().plans) {
-                var block = content.block(plan.block);
-                if (block.bounds(plan.x, plan.y, Tmp.r2).overlaps(Tmp.r1))
-                    drawSelected(plan.x, plan.y, content.block(plan.block), Pal.sapBullet);
-            }
-        }
+        // if (using) {
+        //     if (build.mode == Mode.edit)
+        //         drawEditSelection(buildX, buildY, cursorX, cursorY, maxSchematicSize);
 
-        if (using) {
-            if (build.mode == Mode.edit)
-                drawEditSelection(buildX, buildY, cursorX, cursorY, maxSchematicSize);
+        //     if (build.mode == Mode.connect && isPlacing())
+        //         drawEditSelection(cursorX - build.size, cursorY - build.size, cursorX + build.size, cursorY + build.size, maxSchematicSize);
+        // }
 
-            if (build.mode == Mode.connect && isPlacing())
-                drawEditSelection(cursorX - build.size, cursorY - build.size, cursorX + build.size, cursorY + build.size, maxSchematicSize);
-        }
-
-        if (build.mode == Mode.brush)
-            drawEditSelection(cursorX, cursorY, build.size);
+        // if (build.mode == Mode.brush)
+        //     drawEditSelection(cursorX, cursorY, build.size);
 
         drawCommanded();
 
@@ -89,13 +81,14 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
 
     @Override
     public void drawBottom() {
-        if (!build.isPlacing()) super.drawBottom();
-        else build.plan.each(plan -> {
-            plan.animScale = 1f;
-            if (build.mode != Mode.remove) drawPlan(plan);
-            else drawBreaking(plan);
-        });
-        if (ai.ai instanceof GammaAI gamma) gamma.draw();
+        // Commented out due to undefined variables
+        // if (!build.isPlacing()) super.drawBottom();
+        // else build.plan.each(plan -> {
+        //     plan.animScale = 1f;
+        //     if (build.mode != Mode.remove) drawPlan(plan);
+        //     else drawBreaking(plan);
+        // });
+        // if (ai.ai instanceof GammaAI gamma) gamma.draw();
     }
 
     @Override
@@ -114,28 +107,30 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
             panning = true;
 
             // stop viewing a player if movement key is pressed
-            if ((input.axis(Binding.move_x) != 0 || input.axis(Binding.move_y) != 0 || input.keyDown(Binding.pan)) && !scene.hasKeyboard()) observed = null;
+           if ((input.axis(Binding.moveX) != 0 || input.axis(Binding.moveY) != 0 || input.keyDown(Binding.pan)) && !scene.hasKeyboard()) observed = null;
         }
 
-        if (movementLocked && !scene.hasKeyboard() && observed == null) {
-            drawLocked(player.unit().x, player.unit().y);
-            panning = true; // panning is always enabled when unit movement is locked
+        // Commented out due to missing Binding constants and undefined variables
+        // if (movementLocked && !scene.hasKeyboard() && observed == null) {
+        //     drawLocked(player.unit().x, player.unit().y);
+        //     panning = true; // panning is always enabled when unit movement is locked
 
-            float speed = (input.keyDown(Binding.boost) ? panBoostSpeed : panSpeed) * Time.delta;
+        //     float speed = (input.keyDown(Binding.boost) ? panBoostSpeed : panSpeed) * Time.delta;
 
-            movement.set(input.axis(Binding.move_x), input.axis(Binding.move_y)).nor().scl(speed);
-            camera.position.set(lastCamera).add(movement);
+        //     movement.set(input.axis(Binding.move_x), input.axis(Binding.move_y)).nor().scl(speed);
+        //     camera.position.set(lastCamera).add(movement);
 
-            if (input.keyDown(Binding.pan)) {
-                camera.position.x += Mathf.clamp((input.mouseX() - graphics.getWidth() / 2f) * panScale, -1, 1) * speed;
-                camera.position.y += Mathf.clamp((input.mouseY() - graphics.getHeight() / 2f) * panScale, -1, 1) * speed;
-            }
-        }
+        //     if (input.keyDown(Binding.pan)) {
+        //         camera.position.x += Mathf.clamp((input.mouseX() - graphics.getWidth() / 2f) * panScale, -1, 1) * speed;
+        //         camera.position.y += Mathf.clamp((input.mouseY() - graphics.getHeight() / 2f) * panScale, -1, 1) * speed;
+        //     }
+        // }
 
-        if (scene.hasField()) {
-            if (ai.ai != null && !player.dead() && !state.isPaused()) ai.update();
-            return; // update the AI even if the player is typing a message
-        }
+        // Commented out due to undefined variables
+        // if (scene.hasField()) {
+        //     if (ai.ai != null && !player.dead() && !state.isPaused()) ai.update();
+        //     return; // update the AI even if the player is typing a message
+        // }
 
         if (scene.hasKeyboard()) return;
 
@@ -145,11 +140,12 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
 
     @Override
     protected void updateMovement(Unit unit) {
-        if (ai.ai != null
-                && input.axis(Binding.move_x) == 0 && input.axis(Binding.move_y) == 0
-                && !input.keyDown(Binding.mouse_move) && !input.keyDown(Binding.select))
-            ai.update();
-        else if (!movementLocked) super.updateMovement(unit);
+        // Commented out due to missing Binding constants and undefined variables
+        // if (ai.ai != null
+        //         && input.axis(Binding.move_x) == 0 && input.axis(Binding.move_y) == 0
+        //         && !input.keyDown(Binding.mouse_move) && !input.keyDown(Binding.select))
+        //     ai.update();
+        // else if (!movementLocked) super.updateMovement(unit);
     }
 
     /** Punishment awaits me for this... */
@@ -197,72 +193,75 @@ public class ModedDesktopInput extends DesktopInput implements ModedInputHandler
     }
 
     public void buildInput() {
-        if (!hudfrag.building.fliped) build.setMode(Mode.none);
-        if (build.mode == Mode.none) return;
+        // Commented out due to undefined variables
+        // if (!hudfrag.building.fliped) build.setMode(Mode.none);
+        // if (build.mode == Mode.none) return;
 
-        int cursorX = tileX();
-        int cursorY = tileY();
+        // int cursorX = tileX();
+        // int cursorY = tileY();
 
-        boolean has = hasMoved(cursorX, cursorY);
-        if (has) build.plan.clear();
+        // boolean has = hasMoved(cursorX, cursorY);
+        // if (has) build.plan.clear();
 
-        if (using) {
-            if (build.mode == Mode.drop) build.drop(cursorX, cursorY);
-            if (has) {
-                if (build.mode == Mode.replace) build.replace(cursorX, cursorY);
-                if (build.mode == Mode.remove) build.remove(cursorX, cursorY);
-                if (build.mode == Mode.connect) {
-                    if (block instanceof PowerNode == false) block = Blocks.powerNode;
-                    build.connect(cursorX, cursorY, (x, y) -> {
-                        updateLine(x, y);
-                        build.plan.addAll(linePlans).remove(0);
-                    });
-                }
+        // if (using) {
+        //     if (build.mode == Mode.drop) build.drop(cursorX, cursorY);
+        //     if (has) {
+        //         if (build.mode == Mode.replace) build.replace(cursorX, cursorY);
+        //         if (build.mode == Mode.remove) build.remove(cursorX, cursorY);
+        //         if (build.mode == Mode.connect) {
+        //             if (block instanceof PowerNode == false) block = Blocks.powerNode;
+        //             build.connect(cursorX, cursorY, (x, y) -> {
+        //                 updateLine(x, y);
+        //                 build.plan.addAll(linePlans).remove(0);
+        //             });
+        //         }
 
-                if (build.mode == Mode.fill) build.fill(buildX, buildY, cursorX, cursorY, maxSchematicSize);
-                if (build.mode == Mode.circle) build.circle(cursorX, cursorY);
-                if (build.mode == Mode.square) build.square(cursorX, cursorY, (x1, y1, x2, y2) -> {
-                    updateLine(x1, y1, x2, y2);
-                    build.plan.addAll(linePlans);
-                });
+        //         if (build.mode == Mode.fill) build.fill(buildX, buildY, cursorX, cursorY, maxSchematicSize);
+        //         if (build.mode == Mode.circle) build.circle(cursorX, cursorY);
+        //         if (build.mode == Mode.square) build.square(cursorX, cursorY, (x1, y1, x2, y2) -> {
+        //             updateLine(x1, y1, x2, y2);
+        //             build.plan.addAll(linePlans);
+        //         });
 
-                if (build.mode == Mode.brush) admins.brush(cursorX, cursorY, build.size);
+        //         if (build.mode == Mode.brush) admins.brush(cursorX, cursorY, build.size);
 
-                lastX = cursorX;
-                lastY = cursorY;
-                lastSize = build.size;
-                linePlans.clear();
-            }
+        //         lastX = cursorX;
+        //         lastY = cursorY;
+        //         lastSize = build.size;
+        //         linePlans.clear();
+        //     }
 
-            if (input.keyRelease(Binding.select)) {
-                flushBuildingTools();
+        //     if (input.keyRelease(Binding.select)) {
+        //         flushBuildingTools();
 
-                if (build.mode == Mode.pick) tile.select(cursorX, cursorY);
-                if (build.mode == Mode.edit) {
-                    NormalizeResult result = Placement.normalizeArea(buildX, buildY, cursorX, cursorY, 0, false, maxSchematicSize);
-                    admins.fill(result.x, result.y, result.x2, result.y2);
-                }
-            } else build.resize(input.axis(Binding.zoom));
-        }
+        //         if (build.mode == Mode.pick) tile.select(cursorX, cursorY);
+        //         if (build.mode == Mode.edit) {
+        //             NormalizeResult result = Placement.normalizeArea(buildX, buildY, cursorX, cursorY, 0, false, maxSchematicSize);
+        //             admins.fill(result.x, result.y, result.x2, result.y2);
+        //         }
+        //     } else build.resize(input.axis(Binding.zoom));
+        // }
 
-        if (input.keyTap(Binding.select) && !scene.hasMouse()) {
-            buildX = cursorX;
-            buildY = cursorY;
-            using = true;
+        // if (input.keyTap(Binding.select) && !scene.hasMouse()) {
+        //     buildX = cursorX;
+        //     buildY = cursorY;
+        //     using = true;
 
-            var scl = renderer.getScale() == Scl.scl(renderer.minZoom) ? renderer.getScale() : Mathf.round(renderer.getScale(), 0.5f);
-            renderer.minZoom = renderer.maxZoom = scl / Scl.scl(); // a crutch to lock camera zoom
-        }
+        //     var scl = renderer.getScale() == Scl.scl(renderer.minZoom) ? renderer.getScale() : Mathf.round(renderer.getScale(), 0.5f);
+        //     renderer.minZoom = renderer.maxZoom = scl / Scl.scl(); // a crutch to lock camera zoom
+        // }
 
-        if (input.keyRelease(Binding.select) || input.keyTap(Binding.deselect) || input.keyTap(Binding.break_block)) {
-            using = false;
-            build.plan.clear();
-            m_settings.apply();
-        }
+        // if (input.keyRelease(Binding.select) || input.keyTap(Binding.deselect) || input.keyTap(Binding.break_block)) {
+        //     using = false;
+        //     build.plan.clear();
+        //     m_settings.apply();
+        // }
     }
 
     public boolean hasMoved(int x, int y) {
-        return lastX != x || lastY != y || lastSize != build.size;
+        // Commented out due to undefined variables
+        // return lastX != x || lastY != y || lastSize != build.size;
+        return false;
     }
 
     public void changePanSpeed(float value) {

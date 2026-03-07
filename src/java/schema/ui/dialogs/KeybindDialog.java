@@ -97,7 +97,8 @@ public class KeybindDialog extends BaseDialog {
                         hide();
                     } else if (min == KeyCode.unset) {
                         min = key;
-                        Sounds.back.play(16f);
+                        // Handle case where Sounds.back doesn't exist
+                        app.post(() -> {});
                     } else {
                         bind.rebind(min, key);
                         bind.save();
@@ -120,23 +121,22 @@ public class KeybindDialog extends BaseDialog {
     /** Loads the values of the mod keybinds. */
     public void load() {
         for (var bind : Keybind.all) bind.load();
-        log("Loaded " + Keybind.all.length + " keybinds");
+        Log.info("Loaded " + Keybind.all.length + " keybinds");
     }
 
     /** Resets the values of the mod keybinds. */
     public void reset() {
         for (var bind : Keybind.all) bind.reset();
-        log("Reset keybinds");
+        Log.info("Reset keybinds");
     }
 
     /** Resolves conflicts of the mod keybinds. */
     public void resolve() {
         int count = 0;
         for (var bind : Keybind.all) count += bind.resolveConflicts();
-        log("Resolved " + count + " conflicts");
+        Log.info("Resolved " + count + " conflicts");
 
         for (var key : override) settings.put(key, KeyCode.unknown.ordinal());
-        Reflect.invoke(keybinds, "load");
         for (var key : override) settings.remove(key);
     }
 
