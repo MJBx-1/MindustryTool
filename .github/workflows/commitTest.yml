@@ -7,18 +7,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    # 1. Force install API 33 and matching Build Tools to prevent the Record crash
+    - name: Install Android SDK 33 & Build Tools
+      run: |
+        yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.2"
+
+    # 2. Add Build Tools 33.0.2 to the PATH (instead of 34.0.0)
     - name: Set up PATH
       run: |
-        echo "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH
+        echo "${ANDROID_HOME}/build-tools/33.0.2" >> $GITHUB_PATH
+
+    # 3. Setup JDK 17 (Updated to v4 to avoid Node.js deprecation warnings)
     - name: Set up JDK 17
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v4
       with:
-        java-version: 17
+        java-version: '17'
+        distribution: 'temurin'
+
     - name: Build mod jar
       run: |
         chmod +x ./gradlew
         ./gradlew deploy
+
     - name: Upload built jar file
       uses: actions/upload-artifact@v4
       with:
