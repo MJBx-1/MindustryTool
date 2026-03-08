@@ -173,7 +173,6 @@ public class HudFragment {
                 });
 
                 partitionbt(pad, mode -> {
-                    mode.add(building).row();
                     setMode(mode, Icon.upload, Mode.drop);
                     setMode(mode, Icon.link, Mode.replace);
                     setMode(mode, Icon.hammer, Mode.remove);
@@ -217,9 +216,8 @@ public class HudFragment {
 
             if (!SchemeUpdater.installed("test-utils")) cont.row();
 
-            cont.button("@none", Icon.menu, Styles.flatBordert, () -> {
-                m_schematics.nextLayer();
-            }).size(155f, 50f).margin(6f).update(button -> button.setText(bundle.get("layer." + m_schematics.layer)));
+            // Removed the player.building button (database icon) from bottom left corner
+            // Keeping only the Schematics button as requested
         });
 
         parent.fill(cont -> { // Mobile Buttons
