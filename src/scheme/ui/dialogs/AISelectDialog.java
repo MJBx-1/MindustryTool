@@ -90,6 +90,7 @@ public class AISelectDialog extends ListDialog {
         ((GammaAI) ai).cache();
     }
 
+    
     public record UnitAI(UnitType type, AIController ai) {
 
         public String name() {

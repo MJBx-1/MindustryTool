@@ -33,7 +33,7 @@ import static mindustry.Vars.*;
 import java.io.*;
 import java.util.zip.InflaterInputStream;
 
-/** Last update - Apr 5, 2025 | 2025-4-5 */
+/** Last update - Aug 26, 2022 */
 public class ModedSchematics extends Schematics {
 
     /** Too large schematic file extension. */
@@ -132,7 +132,7 @@ public class ModedSchematics extends Schematics {
             } catch (Exception ignored) {}
 
             IntMap<Block> blocks = new IntMap<>();
-            short length = (short) stream.readUnsignedByte();
+            byte length = stream.readByte();
             for (int i = 0; i < length; i++) {
                 String name = stream.readUTF();
                 Block block = content.getByName(ContentType.block, SaveFileReader.fallback.get(name, name));
@@ -172,11 +172,9 @@ public class ModedSchematics extends Schematics {
     @Override
     public Seq<BuildPlan> toPlans(Schematic schem, int x, int y) {
         int dx = x - schem.width / 2, dy = y - schem.height / 2;
-        // Commented out due to missing methods and type conversion issues
-        // return schem.tiles.map(t -> new BuildPlan(t.x + dx, t.y + dy, t.rotation, t.block, t.config).original(t.x, t.y, schem.width, schem.height))
-        //         .removeAll(plan -> !plan.block.unlockedNow())
-        //         .sort(Structs.comparingInt(plan -> -plan.block.schematicPriority));
-        return new Seq<>();
+        return schem.tiles.<BuildPlan>map(t -> new BuildPlan(t.x + dx, t.y + dy, t.rotation, t.block, t.config))
+                .removeAll(plan -> !plan.block.unlockedNow())
+                .sort(Structs.comparingInt(plan -> -plan.block.schematicPriority));
     }
 
     @Override

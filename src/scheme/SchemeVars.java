@@ -22,6 +22,8 @@ public class SchemeVars {
     public static AdminsTools admins;
     public static RendererTools render;
     public static BuildingTools build;
+    public static UnitsCache units;
+    public static BuildsCache builds;
 
     public static AdminsConfigDialog adminscfg;
     public static RendererConfigDialog rendercfg;
@@ -36,6 +38,7 @@ public class SchemeVars {
     public static ContentSelectDialog<Item> item;
 
     public static SettingsMenuDialog m_settings;
+    public static KeybindCombinationsDialog keycomb;
     public static SchemasDialog schemas;
     public static ImageParserDialog parser;
     public static WaveApproachingDialog approaching;
@@ -52,10 +55,7 @@ public class SchemeVars {
             "n3.xpdustry.com:7025",
             "37.187.73.180:7025",
             "claj.phoenix-network.dev:4000",
-            "167.235.159.121:4000",
-            "new.xem8k5.top:1050",
-            "123.149.153.233:1050"
-    );
+            "167.235.159.121:4000");
 
     /** List of ip servers that block the mod. */
     public static Seq<String> antiModIPs = Seq.with(
@@ -63,12 +63,21 @@ public class SchemeVars {
             "91.209.226.11");
 
     public static void load() {
+        // var pixmap = atlas.getPixmap("scheme-size-status-invincible").pixmap.outline(Pal.gray, 3);
+        // var texture = new Texture(pixmap);
+        // texture.setFilter(TextureFilter.linear);
+
+        // atlas.addRegion("status-invincible-ui", texture, 0, 0, 34, 34);
+        // StatusEffects.invincible.loadIcon(); // slip a mod texture under the guise of vanilla
+
         // m_schematics is created in Main to prevent dual loading
         m_input = mobile ? new ModedMobileInput() : new ModedDesktopInput();
 
         admins = AdminsConfigDialog.getTools();
         render = new RendererTools();
         build = new BuildingTools();
+        units = new UnitsCache();
+        builds = new BuildsCache();
 
         adminscfg = new AdminsConfigDialog();
         rendercfg = new RendererConfigDialog();
@@ -89,6 +98,7 @@ public class SchemeVars {
         });
 
         m_settings = new SettingsMenuDialog();
+        keycomb = new KeybindCombinationsDialog();
         schemas = new SchemasDialog();
         parser = new ImageParserDialog();
         approaching = new WaveApproachingDialog();

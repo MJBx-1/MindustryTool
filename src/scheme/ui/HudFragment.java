@@ -16,6 +16,7 @@ import arc.scene.ui.TextField.TextFieldFilter;
 import arc.scene.ui.TextField.TextFieldStyle;
 import arc.scene.ui.layout.*;
 import arc.util.Align;
+import arc.util.Scaling;
 import arc.util.Time;
 import mindustry.game.EventType.*;
 import mindustry.gen.Icon;
@@ -24,6 +25,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.ui.Fonts;
 import mindustry.ui.Styles;
+import scheme.SchemeUpdater;
 import scheme.ai.GammaAI;
 import scheme.ai.NetMinerAI;
 import scheme.ai.GammaAI.Updater;
@@ -73,12 +75,10 @@ public class HudFragment {
             cont.touchable = Touchable.disabled;
             cont.visible(() -> ui.hudfrag.shown && !ui.minimapfrag.shown() && !state.isEditor());
 
-            /*
             float dif = Scl.scl() % .5f == 0 ? 0f : 1f; // there are also a lot of magic numbers
             cont.add(new HexBar(() -> units.shield() / units.maxShield, icon -> {
                 icon.image(player::icon).scaling(Scaling.bounded).grow().maxWidth(54f);
             })).size(92.2f + dif / 2, 80f).padLeft(18.2f - dif).padTop(mobile ? 69f : 0f);
-            */
         });
 
         parent.fill(cont -> { // Gamma UI
@@ -201,7 +201,7 @@ public class HudFragment {
         if (!settings.getBool("mobilebuttons") && !mobile) return;
 
         getCommandButton(cont -> { // Shortcut and cursed schematics button
-            if (/*!SchemeUpdater.installed("test-utils")*/true) // hardcoded paddings
+            if (!SchemeUpdater.installed("test-utils")) // hardcoded paddings
                 cont.row(); // for command button
 
             cont.button("@schematics", Icon.paste, Styles.squareTogglet, () -> {
@@ -209,7 +209,7 @@ public class HudFragment {
                 else shortfrag.show(graphics.getWidth() - (int) Scl.scl(15f), graphics.getHeight() / 2);
             }).size(155f, 50f).margin(8f).checked(t -> shortfrag.visible);
 
-            if (/*!SchemeUpdater.installed("test-utils")*/true) cont.row();
+            if (!SchemeUpdater.installed("test-utils")) cont.row();
 
             cont.button("@none", Icon.menu, Styles.flatBordert, () -> {
                 m_schematics.nextLayer();
@@ -226,7 +226,7 @@ public class HudFragment {
                 partitionmb(pad, mode -> {
                     mode.add(mobiles);
                     if (mobile) setAction(mode, "disarmed", m_input::lockShooting);
-                    else setAction(mode, Icon.book, /* keycomb::show */ null);
+                    else setAction(mode, Icon.book, keycomb::show);
                     setAction(mode, "blasted",   () -> admins.despawn());
                     setAction(mode, "overdrive", () -> admins.teleport());
                     setAction(mode, Icon.lock,   () -> m_input.lockMovement());
@@ -329,6 +329,7 @@ public class HudFragment {
             cont.bottom().left();
 
             cont.visible(() -> ui.hudfrag.shown && !ui.minimapfrag.shown());
+            cont.marginBottom(SchemeUpdater.installed("test-utils") ? 120f : 0f);
             cons.get(cont);
         });
     }

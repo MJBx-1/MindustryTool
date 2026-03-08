@@ -8,17 +8,20 @@ import arc.struct.Seq;
 import mindustry.entities.units.AIController;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Teams.BlockPlan;
+import mindustry.gen.Building;
 import mindustry.gen.Icon;
 import mindustry.gen.Player;
 import mindustry.world.Tile;
 import mindustry.world.blocks.ConstructBlock.ConstructBuild;
+import scheme.ui.dialogs.KeybindCombinationsDialog;
 
+import static arc.Core.*;
 import static mindustry.Vars.*;
 import static scheme.SchemeVars.*;
 
 public class GammaAI extends AIController {
 
-    public static final String tooltip = null;
+    public static final String tooltip = bundle.format("gamma.tooltip", KeybindCombinationsDialog.resetAI);
 
     public static Updater move = Updater.none;
     public static Updater build = Updater.none;
@@ -45,7 +48,7 @@ public class GammaAI extends AIController {
     }
 
     public void block(Tile tile, boolean breaking) {
-        var build = tile.build;
+        Building build = builds.get(tile);
         unit.addBuild(breaking
                 ? new BuildPlan(tile.x, tile.y, build.rotation, build instanceof ConstructBuild c ? c.previous : build.block)
                 : new BuildPlan(tile.x, tile.y));

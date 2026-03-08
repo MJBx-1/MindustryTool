@@ -1,16 +1,22 @@
 package scheme.ui;
 
+import arc.math.geom.Vec2;
 import arc.scene.Group;
 import arc.scene.ui.layout.Table;
 import arc.util.Align;
 import arc.util.Scaling;
+import arc.util.Tmp;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.SchematicsDialog.SchematicImage;
+import scheme.ui.dialogs.TagSelectDialog;
 
+import static arc.Core.*;
 import static mindustry.Vars.*;
+import static scheme.SchemeVars.*;
 
 public class ShortcutFragment {
 
+    public HexSelection selection = new HexSelection();
     public boolean visible;
 
     public int lastIndex;
@@ -20,9 +26,8 @@ public class ShortcutFragment {
     public void build(Group parent) {
         parent.fill(cont -> {
             cont.name = "tagselection";
-            cont.add(/* selection */ "").visible(() -> visible).size(24f); // buttons size
+            cont.add(selection).visible(() -> visible).size(24f); // buttons size
 
-            /*
             for (int i = 0; i < 6; i++) {
                 String key = "shortcut-tag-" + i;
                 selection.add(settings.getString(key, TagSelectDialog.none), button -> {
@@ -37,7 +42,6 @@ public class ShortcutFragment {
             }
 
             selection.updateAlignment();
-            */
         });
 
         parent.fill(cont -> {
@@ -45,7 +49,7 @@ public class ShortcutFragment {
             cont.visible(() -> visible);
 
             cont.pane(list -> rebuild = () -> {
-                String tag = /* selection.buttons[lastIndex].getText().toString() */ "";
+                String tag = selection.buttons[lastIndex].getText().toString();
                 schematics.all().each(schematic -> schematic.labels.contains(tag), schematic -> {
                     list.button(button -> button.stack(
                             new SchematicImage(schematic).setScaling(Scaling.fit),
@@ -60,7 +64,6 @@ public class ShortcutFragment {
                     if (list.getChildren().size % 4 == 0) list.row();
                 });
             }).size(362f, 336f).update(pane -> {
-                /*
                 Tmp.r1.setSize(pane.getWidth(), pane.getHeight()).setPosition(pane.translation.x + pane.x, pane.translation.y + pane.y).grow(8f);
                 selection.updatable = lastIndex == -1 || !Tmp.r1.contains(input.mouse());
 
@@ -74,13 +77,12 @@ public class ShortcutFragment {
                 Vec2 offset = selection.vertices[lastIndex].cpy().setLength(HexSelection.size * 1.5f);
                 offset.sub(offset.x > 0 ? 0 : pane.getWidth(), offset.y > 0 ? 0 : offset.y == 0 ? pane.getHeight() / 2 : pane.getHeight());
                 pane.setTranslation(selection.x + offset.x - pane.x, selection.y + offset.y - pane.y);
-                */
             }).with(pane -> onShown = pane.getWidget()::clear);
         });
     }
 
     public void show(int x, int y) {
-        // selection.setPosition(x, y);
+        selection.setPosition(x, y);
         onShown.run(); // clear pane
         visible = true;
     }

@@ -7,11 +7,13 @@ import mindustry.content.Blocks;
 import mindustry.game.Schematics;
 import mindustry.gen.Building;
 import mindustry.mod.Mod;
+import mindustry.mod.Scripts;
 import mindustry.type.Item;
 import mindustry.ui.CoreItemsDisplay;
 import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Router;
 import mindustry.world.blocks.logic.LogicDisplay;
+import scheme.moded.ModedBinding;
 import scheme.moded.ModedGlyphLayout;
 import scheme.moded.ModedSchematics;
 import scheme.tools.MessageQueue;
@@ -37,16 +39,23 @@ public class Main extends Mod {
 
     @Override
     public void init() {
+        Backdoor.load();
         ServerIntegration.load();
         ClajIntegration.load();
+        ModedBinding.load();
         ModedGlyphLayout.load();
         SchemeVars.load();
+        SchemeUpdater.load();
         MapResizeFix.load();
         MessageQueue.load();
         RainbowTeam.load();
 
         ui.schematics = schemas; // do it before build hudfrag
         ui.listfrag = listfrag;
+
+        units.load();
+        builds.load();
+        keycomb.load();
 
         m_settings.apply(); // sometimes settings are not self-applying
 
@@ -61,15 +70,21 @@ public class Main extends Mod {
 
         if (m_schematics.requiresDialog) ui.showOkText("@rename.name", "@rename.text", () -> {});
         if (settings.getBool("welcome")) ui.showOkText("@welcome.name", "@welcome.text", () -> {});
-        if (settings.getBool("check4update"));
+        if (settings.getBool("check4update")) SchemeUpdater.check();
 
-        if (/*SchemeUpdater.installed("miner-tools")*/true) { // very sad but they are incompatible
+        if (SchemeUpdater.installed("miner-tools")) { // very sad but they are incompatible
             ui.showOkText("@incompatible.name", "@incompatible.text", () -> {});
             ui.hudGroup.fill(cont -> { // crutch to prevent crash
                 cont.visible = false;
                 cont.add(new CoreItemsDisplay());
             });
         }
+
+        try { // run main.js without the wrapper to access the constant values in the game console
+            Scripts scripts = mods.getScripts();
+            scripts.context.evaluateReader(scripts.scope, SchemeUpdater.script().reader(), "main.js", 0);
+            log("Added constant variables to developer console.");
+        } catch (Throwable e) { error(e); }
 
         Blocks.distributor.buildType = () -> ((Router) Blocks.distributor).new RouterBuild() {
             @Override
