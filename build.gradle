@@ -55,9 +55,9 @@ tasks.register('jarAndroid'){
         if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
 
         // def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
-        // Find the highest Android SDK that is API 33 or lower to prevent java.lang.Record desugaring conflicts
+ // Strictly force Gradle to pick an API between 10 and 33, completely ignoring API 34+ and text-named previews
 def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find { f -> 
-    new File(f, "android.jar").exists() && !f.name.matches(".*-(3[4-9]|[4-9][0-9])")
+    new File(f, "android.jar").exists() && f.name.matches(".*-([1-2][0-9]|3[0-3])")
 }
 
         if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
