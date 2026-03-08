@@ -1,23 +1,43 @@
 #the mod name as displayed in-game
-displayName: "tool"
+displayName: "Scheme Size"
 
 #the internal name of your mod
-name: "Tool"
+name: "scheme-size"
 
 #your name
-author: "MJBx"
+author: "[#0096FF]xzxADIxzx"
 
 #the fully qualified main class of the mod
 main: "scheme.Main"
 
 #the mod description as seen in the mod dialog
-description: "A Mindustry Java mod template."
+description: "A mod that increases the schematic size limit to 512 blocks! Adds admins, renderer and building tools. Has an updater, keybinds and AI support.
+[red]Vanilla Only![orange]
+
+   - Release!
+   - Settings
+   - Java 8
+   - Controls
+   - Updater
+   - Mobile Support
+   - Admins Tools
+
+   - Building Tools
+   - AI Power
+   - Renderer Tools
+   - Deep Cleaning
+   - Schematic Shortcuts
+   - Cursed Schematics
+   - Advanced Dev Console
+   - Copy Link and Join
+"
 
 #the mod version
-version: 1.0
+version: 2.7.79
 
 #the minimum game build required to run this mod
 minGameVersion: 154
 
 #this is a java mod
 java: true
+hidden: true

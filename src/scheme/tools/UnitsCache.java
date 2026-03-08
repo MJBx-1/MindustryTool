@@ -63,12 +63,18 @@ Events.on(UnitChangeEvent.class, event -> {
                     break;
                 }
             }
-        });;
+        });
     }
 
+    // public float shield() {
+    //     return ability == null ? player.unit().shield : ability.data;
+    // }
     public float shield() {
-        return ability == null ? player.unit().shield : ability.data;
-    }
+    // --- V8 HUD SAFETY CHECK ---
+    if (player == null || player.unit() == null) return 0f;
+    
+    return ability == null ? player.unit().shield : ability.data;
+}
 
     public void refresh() {
         if (!cache.isEmpty()) cache();

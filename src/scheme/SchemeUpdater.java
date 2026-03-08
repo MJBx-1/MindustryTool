@@ -70,7 +70,7 @@ public class SchemeUpdater {
     }
 
     public static Fi script() {
-        return mod.root.child("scripts").child("main.js");
+        return mod.root.child("resources").child("scripts").child("main.js");
     }
 
     public static boolean installed(String mod) {

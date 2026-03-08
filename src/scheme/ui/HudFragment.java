@@ -117,8 +117,14 @@ public class HudFragment {
             cont.table(Tex.pane, pad -> {
                 pad.table(mode -> {
                     Events.run(UnitChangeEvent.class, () -> {
-                        mode.clear();
-                        mode.button(Icon.line, check, () -> NetMinerAI.priorityItem = null).checked(t -> NetMinerAI.priorityItem == null).size(37.5f);
+                        mode.clear(); // clear the old UI first
+
+                        // --- V8 SAFETY CHECK ---
+                        if (player.unit() == null || player.unit().type == null) return;
+                        // -----------------------
+
+                        mode.button(Icon.line, check, () -> NetMinerAI.priorityItem = null)
+                            .checked(t -> NetMinerAI.priorityItem == null).size(37.5f);
 
                         content.items().each(item -> item.hardness <= player.unit().type.mineTier && indexer.hasOre(item), item -> {
                             setItem(mode, item);
