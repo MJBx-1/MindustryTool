@@ -7,18 +7,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    # 1. Install SDK 33 (for the Record fix) AND Build Tools 34.0.0 (for Java 17 support)
+    - name: Install Android SDK 33 & Build Tools 34
+      run: |
+        yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;34.0.0"
+
+    # 2. Put Build Tools 34.0.0 in the PATH so Gradle uses the newer d8
     - name: Set up PATH
       run: |
         echo "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH
+
+    # 3. Setup JDK 17
     - name: Set up JDK 17
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v4
       with:
-        java-version: 17
+        java-version: '17'
+        distribution: 'temurin'
+
     - name: Build mod jar
       run: |
         chmod +x ./gradlew
         ./gradlew deploy
+
     - name: Upload built jar file
       uses: actions/upload-artifact@v4
       with:
