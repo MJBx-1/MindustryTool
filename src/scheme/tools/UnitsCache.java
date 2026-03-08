@@ -36,21 +36,34 @@ public class UnitsCache {
         Events.run(UnitUnloadEvent.class, this::refresh);
         Events.run(UnitChangeEvent.class, this::refresh);
 
-        Events.on(UnitChangeEvent.class, event -> {
+Events.on(UnitChangeEvent.class, event -> {
             if (event.player != player) return;
+
+            // --- V8 SAFETY CHECK ---
+            // If the player is dead, switching, or inside a turret (BlockUnit), the type is null!
+            if (player.unit() == null || player.unit().type == null) {
+                maxAccepted = 0;
+                maxShield = -1;
+                ability = null;
+                return;
+            }
+            // -----------------------
+
             maxAccepted = player.unit().type.itemCapacity;
 
             maxShield = -1;
             ability = null;
-            for (Ability ability : player.unit().abilities) if (ability instanceof ForceFieldAbility field) {
-                maxShield = field.max;
-                break;
-            } else if (ability instanceof ShieldArcAbility shield) {
-                maxShield = shield.max;
-                this.ability = shield;
-                break;
+            for (Ability ability : player.unit().abilities) {
+                if (ability instanceof ForceFieldAbility field) {
+                    maxShield = field.max;
+                    break;
+                } else if (ability instanceof ShieldArcAbility shield) {
+                    maxShield = shield.max;
+                    this.ability = shield;
+                    break;
+                }
             }
-        });
+        });;
     }
 
     public float shield() {
