@@ -58,7 +58,7 @@ public class RendererConfigDialog extends BaseDialog {
     }
 
     private void check(Table table, String name, Boolc listener, Boolp checked) {
-        table.check("@render." + name, listener).left().with(check -> {
+        table.check(bundle.get("render." + name), listener).left().with(check -> {
             if (checked != null) check.update(() -> check.setChecked(checked.get()));
         }).row();
     }

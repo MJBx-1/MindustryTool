@@ -209,10 +209,13 @@ public class HudFragment {
             if (!SchemeUpdater.installed("test-utils")) // hardcoded paddings
                 cont.row(); // for command button
 
-            cont.button("@schematics", Icon.paste, Styles.squareTogglet, () -> {
-                if (shortfrag.visible) shortfrag.hide();
-                else shortfrag.show(graphics.getWidth() - (int) Scl.scl(15f), graphics.getHeight() / 2);
-            }).size(155f, 50f).margin(8f).checked(t -> shortfrag.visible);
+            // Removed the Schematics button for mobile devices as requested
+            // if (!mobile) {
+            //     cont.button("@schematics", Icon.paste, Styles.squareTogglet, () -> {
+            //         if (shortfrag.visible) shortfrag.hide();
+            //         else shortfrag.show(graphics.getWidth() - (int) Scl.scl(15f), graphics.getHeight() / 2);
+            //     }).size(155f, 50f).margin(8f).checked(t -> shortfrag.visible);
+            // }
 
             if (!SchemeUpdater.installed("test-utils")) cont.row();
 
