@@ -1,9 +1,11 @@
 package scheme;
 
+import arc.Events;
 import arc.graphics.g2d.Draw;
 import arc.util.Log;
 import arc.util.Tmp;
 import mindustry.content.Blocks;
+import mindustry.game.EventType.ClientLoadEvent;
 import mindustry.game.Schematics;
 import mindustry.gen.Building;
 import mindustry.mod.Mod;
@@ -19,6 +21,7 @@ import scheme.moded.ModedSchematics;
 import scheme.tools.MessageQueue;
 import scheme.tools.RainbowTeam;
 import scheme.ui.MapResizeFix;
+import mindustry.game.EventType.ClientLoadEvent;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -49,9 +52,13 @@ public class Main extends Mod {
         MapResizeFix.load();
         MessageQueue.load();
         RainbowTeam.load();
+        // ui.schematics = schemas; // do it before build hudfrag
+        // ui.listfrag = listfrag;
+ui.schematics = schemas;
 
-        ui.schematics = schemas; // do it before build hudfrag
-        ui.listfrag = listfrag;
+Events.on(ClientLoadEvent.class, e -> {
+    ui.listfrag = listfrag;
+});
 
         units.load();
         builds.load();
