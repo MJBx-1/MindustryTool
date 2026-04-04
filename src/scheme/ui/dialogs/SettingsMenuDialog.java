@@ -8,24 +8,24 @@ import static scheme.SchemeVars.*;
 
 public class SettingsMenuDialog {
 
-    public SettingsMenuDialog() {
-        // ui.settings.shown(t -> apply()); // or just call apply() directly
-        ui.settings.addCategory("@category.mod.name", Icon.book, table -> {
-            if (!mobile) table.sliderPref("panspeedmul", 4, 4, 20, this::processor);
+    // public SettingsMenuDialog() {
+    //     // ui.settings.shown(t -> apply()); // or just call apply() directly
+    //     ui.settings.addCategory("@category.mod.name", Icon.book, table -> {
+    //         if (!mobile) table.sliderPref("panspeedmul", 4, 4, 20, this::processor);
 
-            table.sliderPref("maxzoommul", 4, 4, 20, this::processor);
-            table.sliderPref("minzoommul", 4, 4, 20, this::processor);
+    //         table.sliderPref("maxzoommul", 4, 4, 20, this::processor);
+    //         table.sliderPref("minzoommul", 4, 4, 20, this::processor);
 
-            if (!mobile) table.checkPref("mobilebuttons", true);
+    //         if (!mobile) table.checkPref("mobilebuttons", true);
 
-            table.checkPref("hardscheme", false);
-            table.checkPref("approachenabled", true);
-            table.checkPref("welcome", true);
-            table.checkPref("check4update", true);
+    //         table.checkPref("hardscheme", false);
+    //         table.checkPref("approachenabled", true);
+    //         table.checkPref("welcome", true);
+    //         table.checkPref("check4update", true);
 
-            table.areaTextPref("subtitle", "I am using Scheme Size btw");
-        });
-    }
+    //         table.areaTextPref("subtitle", "I am using Scheme Size btw");
+    //     });
+    // }
 
     public void apply() {
         m_input.changePanSpeed(settings.getInt("panspeedmul"));
