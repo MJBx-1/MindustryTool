@@ -266,12 +266,12 @@ Log.info("HUD children: @", ui.hudGroup.find("overlaymarker"));
             });
         });
 
-        Table info = getInfoTable();
-if (info != null) {
-    info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
-}
-        info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
-    }
+//         Table info = getInfoTable();
+// if (info != null) {
+//     info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
+// }
+    //     info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
+    // }
 
     private Cell<Table> partitionbt(Table table, Cons<Table> cons) {
         if (table.hasChildren()) table.image().color(Pal.gray).fillY().width(4f).pad(4f).visible(() -> building.fliped);
