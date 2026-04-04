@@ -18,6 +18,7 @@ import mindustry.input.Placement.NormalizeDrawResult;
 import mindustry.world.Tile;
 import scheme.tools.BuildingTools.Mode;
 import scheme.ui.dialogs.KeybindCombinationsDialog;
+import arc.util.Align;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -75,7 +76,7 @@ public interface ModedInputHandler {
     public default void drawSize(int x1, int y1, int x2, int y2, int maxLength) {
         String x = getSize(Math.abs(x1 - x2), maxLength);
         String y = getSize(Math.abs(y1 - y2), maxLength);
-        ui.showLabel(x + ", " + y, 0.02f, x2 * tilesize + sizeX, y2 * tilesize + sizeY);
+        ui.showLabel(x + ", " + y, Align.center, 0.02f, x2 * tilesize + sizeX, y2 * tilesize + sizeY);
     }
 
     public default String getSize(int size, int maxLength) {
@@ -108,6 +109,6 @@ public interface ModedInputHandler {
         ui.showLabel(bundle.format(
                 Mathf.absin(25f, 1f) < .5f ? "locked.info" : "locked.bind",
                 Color.orange.cpy().lerp(Color.scarlet, Mathf.absin(3f, 1f)),
-                KeybindCombinationsDialog.lockMovement), 0.02f, x, y);
+                KeybindCombinationsDialog.lockMovement), Align.center, 0.02f, x, y);
     }
 }

@@ -105,7 +105,7 @@ public class RendererTools {
 	}
 
     public void drawPlans(Unit unit, boolean valid) {
-        Draw.draw(Layer.plans, valid ? unit::drawBuildPlans : () -> unit.plans.each(plan -> {
+        Draw.draw(Layer.plans, valid ? unit::drawPlans: () -> unit.plans.each(plan -> {
             plan.animScale = 1f;
             plan.block.drawPlan(plan, unit.plans, valid);
         }));
