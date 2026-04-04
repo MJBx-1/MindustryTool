@@ -9,7 +9,7 @@ import static scheme.SchemeVars.*;
 public class SettingsMenuDialog {
 
     public SettingsMenuDialog() {
-        ui.settings.shown(t -> apply()); // or just call apply() directly
+        // ui.settings.shown(t -> apply()); // or just call apply() directly
         ui.settings.addCategory("@category.mod.name", Icon.book, table -> {
             if (!mobile) table.sliderPref("panspeedmul", 4, 4, 20, this::processor);
 
