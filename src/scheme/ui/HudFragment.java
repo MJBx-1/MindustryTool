@@ -267,6 +267,9 @@ Log.info("HUD children: @", ui.hudGroup.find("overlaymarker"));
         });
 
         Table info = getInfoTable();
+if (info != null) {
+    info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
+}
         info.update(() -> info.setTranslation(0f, -Scl.scl(mobiles.fliped ? 190.5f : 63.5f)));
     }
 
@@ -321,13 +324,28 @@ Log.info("HUD children: @", ui.hudGroup.find("overlaymarker"));
         });
     }
 
-    private Table getInfoTable() {
-        return (Table) ((Table) getWavesMain().getChildren().get(0)).getChildren().get(1);
+private Table getInfoTable() {
+    Stack wavesMain = getWavesMain();
+    if (wavesMain == null) return null;
+    // find the first Table child, then within it find the second Table
+    for (var child : wavesMain.getChildren()) {
+        if (child instanceof Table t) {
+            for (var c : t.getChildren()) {
+                if (c instanceof Table inner) return inner;
+            }
+        }
     }
+    return null;
+}
 
-    private Stack getWavesMain() {
-        return (Stack) ((Table) ui.hudGroup.find("overlaymarker")).getChildren().get(mobile ? 3 : 0);
+private Stack getWavesMain() {
+    Table overlay = (Table) ui.hudGroup.find("overlaymarker");
+    // search for a Stack child directly instead of using hardcoded index
+    for (var child : overlay.getChildren()) {
+        if (child instanceof Stack s) return s;
     }
+    return null;
+}
 
     private ImageButton getSchematicsButton() {
     // find "overlaymarker" table
@@ -352,17 +370,22 @@ Log.info("HUD children: @", ui.hudGroup.find("overlaymarker"));
     return null;
 }
 
-    private void getCommandButton(Cons<Table> cons) {
-        if (mobile) Events.run(ClientLoadEvent.class, () -> { // the command button is created after the client is loaded
-            cons.get((Table) control.input.uiGroup.getChildren().get(1));
-        });
-        else ui.hudGroup.fill(cont -> {
-            cont.name = "shortcutbutton"; // it's here because there's no sense in renaming an already created table
-            cont.bottom().left();
-
-            cont.visible(() -> ui.hudfrag.shown && !ui.minimapfrag.shown());
-            cont.marginBottom(SchemeUpdater.installed("test-utils") ? 120f : 0f);
-            cons.get(cont);
-        });
-    }
+private void getCommandButton(Cons<Table> cons) {
+    if (mobile) Events.run(ClientLoadEvent.class, () -> {
+        // search for a Table in uiGroup children instead of hardcoded index
+        for (var child : control.input.uiGroup.getChildren()) {
+            if (child instanceof Table t) {
+                cons.get(t);
+                return;
+            }
+        }
+    });
+    else ui.hudGroup.fill(cont -> {
+        cont.name = "shortcutbutton";
+        cont.bottom().left();
+        cont.visible(() -> ui.hudfrag.shown && !ui.minimapfrag.shown());
+        cont.marginBottom(SchemeUpdater.installed("test-utils") ? 120f : 0f);
+        cons.get(cont);
+    });
+}
 }
