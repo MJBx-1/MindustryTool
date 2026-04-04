@@ -80,30 +80,36 @@ tasks.register('jarAndroid'){
         if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
         //collect dependencies needed for desugaring
-        def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")]).collect{ "--classpath $it.path" }.join(" ")
+        def androidJar = new File(platformRoot, "android.jar")
+        def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList())
+            .collect{ "--classpath $it.path" }.join(" ")
 
         def d8 = isWindows ? "d8.bat" : "d8"
 
         //dex and desugar files - this requires d8 in your PATH
-        "$d8 $dependencies --min-api 24 --output ${project.name}Android.jar ${project.name}Desktop.jar"
+        "$d8 $dependencies --lib ${androidJar.path} --min-api 26 --output ${project.name}Android.jar ${project.name}Desktop.jar"
                 .execute(null, new File("build/libs")).waitForProcessOutput(System.out, System.err)
     }
 }
 
 jar{
-    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    // duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     archiveFileName = "${project.name}Desktop.jar"
 
     from{
         configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
     }
 
-    from(projectDir){
-        include "mod.hjson"
-        include "resources/scripts/**" 
-        include "resources/icon.png"
-        include "resources/bundles/**"
-    }
+ from(projectDir){
+    include "mod.hjson"
+    // include "icon.png"  // only if icon.png is at repo root
+}
+
+from("resources/"){
+    include "scripts/**"
+    include "bundles/**"
+    include "icon.png"  // only if icon.png is inside resources/
+}
 
     from("assets/"){
         include "**"
@@ -113,10 +119,13 @@ jar{
 tasks.register('deploy', Jar){
     dependsOn jarAndroid
     dependsOn jar
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     archiveFileName = "${project.name}.jar"
 
     from{ [zipTree("build/libs/${project.name}Desktop.jar"), zipTree("build/libs/${project.name}Android.jar")] }
-
+    from(projectDir){        // add this block
+        include "mod.hjson"
+    }
     doLast{
         delete{
             delete "build/libs/${project.name}Desktop.jar"
