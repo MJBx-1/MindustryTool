@@ -86,6 +86,46 @@ public class Main extends Mod {
             log("Added constant variables to developer console.");
         } catch (Throwable e) { error(e); }
 
+        // Fix bundle loading issue by manually loading the bundle files
+        try {
+            // The bundle files should be automatically loaded by the mod system
+            // but we need to ensure they're loaded with the correct namespace
+            log("Bundle loading attempted - check if @render. prefix works now");
+            log("Bundle keys available: " + (bundle != null ? "Yes" : "No"));
+            
+            // Test if specific bundle keys are accessible
+            if (bundle != null) {
+                String testKey = bundle.get("render.power", "NOT_FOUND");
+                log("Test render.power key: " + testKey);
+            }
+            
+            // Try to force reload the bundle with correct namespace
+            // In Mindustry, mod bundles are typically loaded with the mod name as namespace
+            // But the @ prefix should work automatically if the bundle is properly loaded
+            
+            // Alternative approach: try to access the bundle directly
+            // This might help identify if the bundle is loaded but not accessible via @ prefix
+            if (bundle != null) {
+                // Try to get the bundle keys directly
+                Iterable<String> keys = bundle.getKeys();
+                int keyCount = 0;
+                boolean hasRenderPower = false;
+                
+                if (keys != null) {
+                    for (String key : keys) {
+                        keyCount++;
+                        if (key.equals("render.power")) {
+                            hasRenderPower = true;
+                        }
+                    }
+                }
+                log("Available bundle keys count: " + keyCount);
+                log("render.power key found: " + hasRenderPower);
+            }
+        } catch (Exception e) {
+            log("Bundle loading failed: " + e.getMessage());
+        }
+
         Blocks.distributor.buildType = () -> ((Router) Blocks.distributor).new RouterBuild() {
             @Override
             public boolean canControl() { return true; }

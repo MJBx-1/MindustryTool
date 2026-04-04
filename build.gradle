@@ -84,6 +84,7 @@ jar{
         include "mod.hjson"
         include "resources/scripts/**" 
         include "resources/icon.png"
+        include "resources/bundles/**"
     }
 
     from("assets/"){
