@@ -89,7 +89,8 @@ Events.on(ClientLoadEvent.class, e -> {
 
         try { // run main.js without the wrapper to access the constant values in the game console
             Scripts scripts = mods.getScripts();
-            scripts.context.evaluateReader(scripts.scope, SchemeUpdater.script().reader(), "main.js", 0);
+            // scripts.context.evaluateReader(scripts.scope, SchemeUpdater.script().reader(), "main.js", 0);
+            scripts.context.evaluateReader(scripts.scope, SchemeUpdater.script().reader(), "scheme-size-main.js", 0);
             log("Added constant variables to developer console.");
         } catch (Throwable e) { error(e); }
 
