@@ -2,10 +2,10 @@
 displayName: "Scheme Size"
 
 #the internal name of your mod
-name: "scheme-size"
+name: "Utils"
 
 #your name
-author: "[#0096FF]xzxADIxzx"
+author: "MJBx"
 
 #the fully qualified main class of the mod
 main: "scheme.Main"
