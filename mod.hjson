@@ -36,7 +36,7 @@ description: "A mod that increases the schematic size limit to 512 blocks! Adds 
 version: 2.7.79
 
 #the minimum game build required to run this mod
-minGameVersion: 154
+minGameVersion: 156
 
 #this is a java mod
 java: true

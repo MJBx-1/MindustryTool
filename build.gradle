@@ -118,6 +118,7 @@ tasks.register('deploy', Jar){
 
     doLast{
         delete{
+            delete "build/libs/${project.name}Desktop.jar"
             delete "build/libs/${project.name}Android.jar"
         }
     }
