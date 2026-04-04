@@ -16,6 +16,7 @@ import arc.scene.ui.TextField.TextFieldFilter;
 import arc.scene.ui.TextField.TextFieldStyle;
 import arc.scene.ui.layout.*;
 import arc.util.Align;
+import arc.util.Log;
 import arc.util.Scaling;
 import arc.util.Time;
 import mindustry.game.EventType.*;
@@ -61,12 +62,15 @@ public class HudFragment {
         Events.run(ResizeEvent.class, () -> Time.run(10f, () -> { // idk why, but after resizing shortcut appears in the center of the screen
             if (shortfrag.visible) shortfrag.show(graphics.getWidth() - (int) Scl.scl(15f), graphics.getHeight() / 2);
         }));
-
-        if (mobile) {
-            var button = getSchematicsButton();
-            button.getListeners().remove(2);
-            button.clicked(ui.schematics::show);
-        }
+// temporary debug - remove after fixing
+Log.info("HUD children: @", ui.hudGroup.find("overlaymarker"));
+ if (mobile) {
+    var button = getSchematicsButton();
+    if(button != null) {
+        button.getListeners().remove(2);
+        button.clicked(ui.schematics::show);
+    }
+}
 
         parent.fill(cont -> { // Shield Bar
             cont.name = "shieldbar";
@@ -135,6 +139,8 @@ public class HudFragment {
                 pad.labelWrap(GammaAI.tooltip).labelAlign(2, 8).pad(8f, 0f, 8f, 0f).width(150f).get().getStyle().fontColor = Color.lightGray;
             }).width(150f).margin(0f).update(pad -> pad.setTranslation(0f, settings.getBool("minimap") ? -Scl.scl(mobile ? 272f : 188f) : 0f)).row();
         });
+
+
 
         parent.fill(cont -> { // Building Tools
             cont.name = "buildingtools";
@@ -324,8 +330,27 @@ public class HudFragment {
     }
 
     private ImageButton getSchematicsButton() {
-        return (ImageButton) ((Table) ((Table) ui.hudGroup.find("overlaymarker")).getChildren().get(1)).getChildren().get(2);
+    // find "overlaymarker" table
+    Table overlay = (Table) ui.hudGroup.find("overlaymarker");
+    
+    // recursively search for the schematics ImageButton by name
+    ImageButton btn = (ImageButton) overlay.find("schematics");
+    if(btn != null) return btn;
+    
+    // fallback: search all ImageButtons in the overlay and find the one with the schematics icon
+    for(var child : overlay.getChildren()){
+        if(child instanceof Table t){
+            for(var c : t.getChildren()){
+                if(c instanceof ImageButton ib && ib.getStyle().imageUp != null){
+                    if(ib.getStyle().imageUp.toString().contains("schematics")){
+                        return ib;
+                    }
+                }
+            }
+        }
     }
+    return null;
+}
 
     private void getCommandButton(Cons<Table> cons) {
         if (mobile) Events.run(ClientLoadEvent.class, () -> { // the command button is created after the client is loaded
