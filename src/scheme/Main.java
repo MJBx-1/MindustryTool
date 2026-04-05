@@ -2,7 +2,7 @@ package scheme;
 
 import arc.scene.event.Touchable;
 import arc.util.Time;
-import mindustry.game.EventType.GameLoadEvent;
+
 import mindustry.gen.Icon;
 import mindustry.mod.Mod;
 import mindustry.ui.Styles;
@@ -36,9 +36,6 @@ public class Main extends Mod {
         renderer.addEnvRenderer(0, () -> {
             if (locked && player != null && player.unit() != null && !state.isMenu()) {
                 player.unit().vel.setZero();
-                player.vel.setZero();
-                player.unit().moveX = 0;
-                player.unit().moveY = 0;
             }
         });
     }
